@@ -1,7 +1,14 @@
 import React from "react";
-var classNames = require("classnames");
+import classNames from "classnames";
+import * as constants from "../../constants";
 
 const NodeDescriptor: React.FunctionComponent = () => {
+  /**
+   * get node descriptor
+   * @param id id of descriptor
+   * @param text text to display
+   * @param classNames classnames to add
+   */
   const getDescripor = (id: string, text: string, classNames: string) => {
     return (
       <div id={id} className="descriptor">
@@ -11,22 +18,41 @@ const NodeDescriptor: React.FunctionComponent = () => {
       </div>
     );
   };
+
+  const cssClass = constants.NodeClass;
+
   return (
     <div className="grid-descriptor">
-      {getDescripor("startNode", "Start Node", classNames("node", "start"))}
+      {getDescripor(
+        "startNode",
+        "Start Node",
+        classNames(cssClass.node, cssClass.start)
+      )}
       {getDescripor(
         "destinationNode",
         "Destination Node",
-        classNames("node", "destination")
+        classNames(cssClass.node, cssClass.destination)
       )}
-      {getDescripor("pathNode", "Path Node", classNames("node", "path"))}
-      {getDescripor("unvisitedNode", "Unvisited Node", classNames("node"))}
+      {getDescripor(
+        "pathNode",
+        "Path Node",
+        classNames(cssClass.node, cssClass.path)
+      )}
+      {getDescripor(
+        "unvisitedNode",
+        "Unvisited Node",
+        classNames(cssClass.node)
+      )}
       {getDescripor(
         "visitedNode",
         "Visited Node",
-        classNames("node", "visited")
+        classNames(cssClass.node, cssClass.visited)
       )}
-      {getDescripor("brickNode", "Brick Node", classNames("node", "brick"))}
+      {getDescripor(
+        "brickNode",
+        "Brick Node",
+        classNames(cssClass.node, cssClass.brick)
+      )}
     </div>
   );
 };
