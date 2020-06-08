@@ -18,6 +18,7 @@ class Stage extends React.Component<Props, State> {
   // number of columns in a row
   private numberOfColumns = 50;
 
+  // holds currently dragged node type
   private draggedNodeType = enums.NodeType.None;
 
   render() {
@@ -41,13 +42,11 @@ class Stage extends React.Component<Props, State> {
    */
   private onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     let target: any = e.target;
-    this.draggedNodeType = enums.NodeType.None;
     if (
       NodeHelper.isNode(target) &&
       (NodeHelper.isStartNode(target) || NodeHelper.isDestinationNode(target))
     ) {
       let nodeType = NodeHelper.getNodeType(target);
-      e.dataTransfer.setData("nodeType", nodeType.toString());
       this.draggedNodeType = nodeType;
 
       let cssClass = NodeHelper.getNodeClass(nodeType);
@@ -77,6 +76,8 @@ class Stage extends React.Component<Props, State> {
       element.classList.add(cssClass);
       element.setAttribute("draggable", "true");
     }
+
+    this.draggedNodeType = enums.NodeType.None;
   };
 }
 

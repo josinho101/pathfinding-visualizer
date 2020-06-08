@@ -59,6 +59,9 @@ const Grid: React.FunctionComponent<Props> = (props) => {
           )}
           onDragStart={props.onDragStart}
           onDragEnd={props.onNodeDropEnd}
+          onDragOver={(e) => {
+            e.preventDefault();
+          }}
         ></div>
       );
     }
