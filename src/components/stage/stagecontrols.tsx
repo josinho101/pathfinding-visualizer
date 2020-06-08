@@ -1,6 +1,12 @@
 import React from "react";
 
-const StageControls: React.FunctionComponent = () => {
+interface Props {
+  onVisualizeClick: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
+}
+
+const StageControls: React.FunctionComponent<Props> = (props) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <span className="navbar-brand title">Path finding algorithm</span>
@@ -38,7 +44,12 @@ const StageControls: React.FunctionComponent = () => {
           </li>
           <li className="nav-item dropdown">
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button className="btn btn-success">Visualize</button>
+            <button
+              className="btn btn-success"
+              onClick={props.onVisualizeClick}
+            >
+              Visualize
+            </button>
           </li>
           <li className="nav-item dropdown">
             &nbsp;&nbsp;&nbsp;&nbsp;

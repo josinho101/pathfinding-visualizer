@@ -5,6 +5,7 @@ import Node from "../grid/typings/node";
 import StageControls from "./stagecontrols";
 import NodeHelper from "../../helper/nodehelper";
 import NodeDescriptor from "../grid/nodedescriptor";
+import PathFindingEngine from "../../algorithms/pathfinding/pathfindingengine";
 
 interface State {
   renderedOn: number;
@@ -25,6 +26,12 @@ class Stage extends React.Component<Props, State> {
   // holds nodes
   private nodes: Node[][];
 
+  // selected path finding algorithm
+  private selectedAlgorithm = enums.Algorithm.Dijkstra;
+
+  // holds node position.
+  private nodePositions: number[][];
+
   /**
    * constructor for stage component
    */
@@ -32,18 +39,18 @@ class Stage extends React.Component<Props, State> {
     super(props, state);
 
     // initialize nodes for grid
-    let defaultNodePosition = NodeHelper.getDefaultNodePosition();
+    this.nodePositions = NodeHelper.getDefaultNodePosition();
     this.nodes = NodeHelper.initNodes(
       this.numberOfRows,
       this.numberOfColumns,
-      defaultNodePosition
+      this.nodePositions
     );
   }
 
   render() {
     return (
       <div className="stage">
-        <StageControls />
+        <StageControls onVisualizeClick={this.onVisualizeClick} />
         <NodeDescriptor />
         <Grid
           id="grid"
@@ -54,6 +61,23 @@ class Stage extends React.Component<Props, State> {
       </div>
     );
   }
+
+  /**
+   * triggered when visualize button is clicked
+   */
+  private onVisualizeClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const startRow = this.nodePositions[0][0];
+    const startColumn = this.nodePositions[0][1];
+    const destinationRow = this.nodePositions[1][0];
+    const destinationColumn = this.nodePositions[1][1];
+
+    let startNode = this.nodes[startRow][startColumn];
+    let destinationNode = this.nodes[destinationRow][destinationColumn];
+    let pathfindingEngine = new PathFindingEngine(this.nodes);
+    pathfindingEngine.find(startNode, destinationNode, this.selectedAlgorithm);
+  };
 
   /**
    * triggered when a node is dragged
@@ -93,6 +117,15 @@ class Stage extends React.Component<Props, State> {
       }
       element.classList.add(cssClass);
       element.setAttribute("draggable", "true");
+
+      let newPosition = NodeHelper.getNodePositionFromElemet(element);
+      if (newPosition) {
+        if (this.draggedNodeType === enums.NodeType.Start) {
+          this.nodePositions[0] = newPosition;
+        } else if (this.draggedNodeType === enums.NodeType.Destination) {
+          this.nodePositions[1] = newPosition;
+        }
+      }
     }
 
     this.draggedNodeType = enums.NodeType.None;

@@ -10,3 +10,10 @@ export enum NodeType {
   Visited = 5,
   Brick = 6,
 }
+
+/**
+ * enum for path finding algorithms
+ */
+export enum Algorithm {
+  Dijkstra = 1,
+}

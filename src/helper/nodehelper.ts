@@ -5,7 +5,7 @@ import Node from "../components/grid/typings/node";
 
 class NodeHelper {
   /**
-   * return default nodes.
+   * return start and destination node poistion.
    */
   public static getDefaultNodePosition = () => {
     /*let startRow = UtilityHelper.getRamdonNumber(1, 19);
@@ -19,8 +19,8 @@ class NodeHelper {
     ];*/
 
     return [
-      [10, 11],
-      [10, 40],
+      [9, 11],
+      [9, 40],
     ];
   };
 
@@ -135,6 +135,18 @@ class NodeHelper {
     }
 
     return className;
+  }
+
+  /**
+   * get node position from element id
+   * @param element element
+   */
+  public static getNodePositionFromElemet(element: Element) {
+    if (element) {
+      let id = element.id;
+      let idParts = id.split("-");
+      return [parseInt(idParts[1]), parseInt(idParts[2])];
+    }
   }
 }
 
