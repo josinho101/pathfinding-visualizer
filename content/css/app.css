@@ -1,0 +1,99 @@
+.stage {
+  width: 1012px;
+  height: 513px;
+  margin-left: 13%;
+  margin-top: 5em;
+  border: 1px solid black;
+  padding: 5px;
+  background-color: #f5f2ed;
+}
+
+.title {
+  font-size: 18px;
+}
+
+.range p {
+  color: white;
+  margin: 0px 0px 0px 10px;
+  font-size: 11px;
+}
+
+.range input[type="range"] {
+  margin-left: 10px;
+}
+
+.grid-descriptor {
+  width: 100%;
+  height: 40px;
+  display: flex;
+}
+
+.descriptor {
+  display: flex;
+  padding-top: 10px;
+  margin-right: 10px;
+  font-family: monospace;
+  pointer-events: none;
+}
+
+.descriptor div {
+  border-top: 1px solid rgb(175, 216, 248);
+  border-left: 1px solid rgb(175, 216, 248);
+}
+
+.node-container {
+  width: 100%;
+  height: 400px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-top: 1px solid rgb(175, 216, 248);
+  border-left: 1px solid rgb(175, 216, 248);
+  background-color: white;
+}
+
+.row {
+  margin: 0px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.node {
+  width: 20px;
+  height: 20px;
+  border-right: 1px solid rgb(175, 216, 248);
+  border-bottom: 1px solid rgb(175, 216, 248);
+  background-color: white;
+}
+
+.destination {
+  background-image: url(../images/home.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #a1d5f7;
+  cursor: grab;
+}
+
+.start {
+  background-image: url(../images/man.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #a1d5f7;
+  cursor: grab;
+}
+
+.path {
+  background-image: url(../images/dot.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #e5f19c;
+}
+
+.brick {
+  background-image: url(../images/brick.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.visited {
+  background-color: #663399;
+}
