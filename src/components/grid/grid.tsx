@@ -5,68 +5,31 @@ import * as enums from "../../enums";
 
 interface Props {
   id: string;
-  rowCount: number;
-  columnCount: number;
-  onDragStart: (event: React.DragEvent<HTMLDivElement>) => void;
+  nodes: Node[][];
+  onNodeDragStart: (event: React.DragEvent<HTMLDivElement>) => void;
   onNodeDropEnd: (event: React.DragEvent<HTMLDivElement>) => void;
 }
 
 const Grid: React.FunctionComponent<Props> = (props) => {
-  // start node in grid
-  const startNode: Node = {
-    row: 10,
-    column: 11,
-    type: enums.NodeType.Start,
-  };
-
-  // destination node in grid
-  const destinationNode: Node = {
-    row: 10,
-    column: 40,
-    type: enums.NodeType.Destination,
-  };
-
-  // return true if node is start node
-  const isStartNode = (row: number, column: number) => {
-    return row === startNode.row && column === startNode.column;
-  };
-
-  // return true if node is destination node
-  const isDestinationNode = (row: number, column: number) => {
-    return row === destinationNode.row && column === destinationNode.column;
-  };
-
-  /**
-   * return array of nodes for a row
-   */
-  const getNodes = (row: number, count: number) => {
-    let nodes: JSX.Element[] = [];
-
-    for (let i = 1; i <= count; i++) {
-      let identifier = `node-${row}-${i}`;
-      let isStart = isStartNode(row, i);
-      let isDestination = isDestinationNode(row, i);
-
-      nodes.push(
-        <div
-          id={identifier}
-          key={identifier}
-          draggable={isStart || isDestination}
-          className={classNames(
-            "node",
-            { start: isStart },
-            { destination: isDestination }
-          )}
-          onDragStart={props.onDragStart}
-          onDragEnd={props.onNodeDropEnd}
-          onDragOver={(e) => {
-            e.preventDefault();
-          }}
-        ></div>
-      );
-    }
-
-    return nodes;
+  const getColumn = (node: Node) => {
+    let identifier = `node-${node.row}-${node.column}`;
+    return (
+      <div
+        id={identifier}
+        key={identifier}
+        draggable={node.isStart || node.isDestination}
+        className={classNames(
+          "node",
+          { start: node.isStart },
+          { destination: node.isDestination }
+        )}
+        onDragStart={props.onNodeDragStart}
+        onDragEnd={props.onNodeDropEnd}
+        onDragOver={(e) => {
+          e.preventDefault();
+        }}
+      ></div>
+    );
   };
 
   /**
@@ -83,14 +46,21 @@ const Grid: React.FunctionComponent<Props> = (props) => {
   /**
    * generate grid
    */
-  const generateGrid = (numberOfRows: number, numberOfNodes: number) => {
+  const generateGrid = (nodes: Node[][]) => {
     let rows: JSX.Element[] = [];
 
-    for (let i = 1; i <= numberOfRows; i++) {
-      let nodes = getNodes(i, numberOfNodes);
-      let rowId = `row-${i}`;
-      let row = getRow(rowId, nodes);
-      rows.push(row);
+    for (let row = 0; row < nodes.length; row++) {
+      let nodesArray = nodes[row];
+      let columns: JSX.Element[] = [];
+
+      for (let column = 0; column < nodesArray.length; column++) {
+        columns.push(getColumn(nodesArray[column]));
+      }
+
+      let rowId = `row-${row}`;
+      let jsxRow = getRow(rowId, columns);
+
+      rows.push(jsxRow);
     }
 
     return rows;
@@ -98,7 +68,7 @@ const Grid: React.FunctionComponent<Props> = (props) => {
 
   return (
     <div id={props.id} className="node-container">
-      {generateGrid(props.rowCount, props.columnCount)}
+      {generateGrid(props.nodes)}
     </div>
   );
 };

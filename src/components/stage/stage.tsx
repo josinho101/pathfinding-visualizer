@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from "../grid/grid";
 import * as enums from "../../enums";
+import Node from "../grid/typings/node";
 import StageControls from "./stagecontrols";
 import NodeHelper from "../../helper/nodehelper";
 import NodeDescriptor from "../grid/nodedescriptor";
@@ -21,6 +22,24 @@ class Stage extends React.Component<Props, State> {
   // holds currently dragged node type
   private draggedNodeType = enums.NodeType.None;
 
+  // holds nodes
+  private nodes: Node[][];
+
+  /**
+   * constructor for stage component
+   */
+  constructor(props: Props, state: State) {
+    super(props, state);
+
+    // initialize nodes for grid
+    let defaultNodePosition = NodeHelper.getDefaultNodePosition();
+    this.nodes = NodeHelper.initNodes(
+      this.numberOfRows,
+      this.numberOfColumns,
+      defaultNodePosition
+    );
+  }
+
   render() {
     return (
       <div className="stage">
@@ -28,9 +47,8 @@ class Stage extends React.Component<Props, State> {
         <NodeDescriptor />
         <Grid
           id="grid"
-          rowCount={this.numberOfRows}
-          columnCount={this.numberOfColumns}
-          onDragStart={this.onDragStart}
+          nodes={this.nodes}
+          onNodeDragStart={this.onNodeDragStart}
           onNodeDropEnd={this.onNodeDropEnd}
         />
       </div>
@@ -40,7 +58,7 @@ class Stage extends React.Component<Props, State> {
   /**
    * triggered when a node is dragged
    */
-  private onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+  private onNodeDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     let target: any = e.target;
     if (
       NodeHelper.isNode(target) &&

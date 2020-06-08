@@ -1,7 +1,79 @@
 import * as enums from "../enums";
 import * as constants from "../constants";
+import UtilityHelper from "./utilityhelper";
+import Node from "../components/grid/typings/node";
 
 class NodeHelper {
+  /**
+   * return default nodes.
+   */
+  public static getDefaultNodePosition = () => {
+    /*let startRow = UtilityHelper.getRamdonNumber(1, 19);
+    let startColumn = UtilityHelper.getRamdonNumber(1, 11);
+    let destinationRow = UtilityHelper.getRamdonNumber(1, 19);
+    let destinationColumn = UtilityHelper.getRamdonNumber(40, 49);
+
+    return [
+      [startRow, startColumn],
+      [destinationRow, destinationColumn],
+    ];*/
+
+    return [
+      [10, 11],
+      [10, 40],
+    ];
+  };
+
+  /**
+   * create a node
+   */
+  public static createNode = (
+    row: number,
+    column: number,
+    defaultNodePosition: number[][]
+  ) => {
+    const startRow = defaultNodePosition[0][0];
+    const startColumn = defaultNodePosition[0][1];
+    const destinationRow = defaultNodePosition[1][0];
+    const destinationColumn = defaultNodePosition[1][1];
+
+    let node: Node = {
+      row: row,
+      column: column,
+      distance: Infinity,
+      previousNode: undefined,
+      isVisited: false,
+      isStart: row === startRow && column === startColumn,
+      isDestination: row === destinationRow && column === destinationColumn,
+    };
+
+    return node;
+  };
+
+  /**
+   * Initialize nodes
+   */
+  public static initNodes = (
+    numberOfRows: number,
+    numberOfColumns: number,
+    defaultNodePosition: number[][]
+  ) => {
+    let nodes: Node[][] = [];
+
+    for (let row = 0; row < numberOfRows; row++) {
+      let newRow: Node[] = [];
+
+      for (let column = 0; column < numberOfColumns; column++) {
+        let node = NodeHelper.createNode(row, column, defaultNodePosition);
+        newRow.push(node);
+      }
+
+      nodes.push(newRow);
+    }
+
+    return nodes;
+  };
+
   /**
    * return true if element has destination class
    * @param element element
