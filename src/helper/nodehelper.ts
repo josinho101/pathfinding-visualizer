@@ -8,7 +8,7 @@ class NodeHelper {
    * return start and destination node poistion.
    */
   public static getDefaultNodePosition = () => {
-    /*let startRow = UtilityHelper.getRamdonNumber(1, 19);
+    let startRow = UtilityHelper.getRamdonNumber(1, 19);
     let startColumn = UtilityHelper.getRamdonNumber(1, 11);
     let destinationRow = UtilityHelper.getRamdonNumber(1, 19);
     let destinationColumn = UtilityHelper.getRamdonNumber(40, 49);
@@ -16,12 +16,12 @@ class NodeHelper {
     return [
       [startRow, startColumn],
       [destinationRow, destinationColumn],
-    ];*/
+    ];
 
-    return [
+    /*return [
       [9, 11],
       [9, 40],
-    ];
+    ];*/
   };
 
   /**
@@ -147,6 +147,15 @@ class NodeHelper {
       let idParts = id.split("-");
       return [parseInt(idParts[1]), parseInt(idParts[2])];
     }
+  }
+
+  /**
+   * get node from DOM
+   * @param row row
+   * @param column column
+   */
+  public static getNodeFromDOM(row: number, column: number) {
+    return document.getElementById(`node-${row}-${column}`);
   }
 }
 

@@ -74,7 +74,9 @@ class Stage extends React.Component<Props, State> {
     const destinationColumn = this.nodePositions[1][1];
 
     let startNode = this.nodes[startRow][startColumn];
+    startNode.isStart = true;
     let destinationNode = this.nodes[destinationRow][destinationColumn];
+    destinationNode.isDestination = true;
     let pathfindingEngine = new PathFindingEngine(this.nodes);
     pathfindingEngine.find(startNode, destinationNode, this.selectedAlgorithm);
   };

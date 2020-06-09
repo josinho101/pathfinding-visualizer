@@ -1,4 +1,5 @@
 import * as enums from "../../../enums";
+type Nullable<T> = T | null;
 
 export default interface Node {
   row: number;
@@ -7,5 +8,5 @@ export default interface Node {
   isDestination: boolean;
   isVisited: boolean;
   distance: number;
-  previousNode: Node | undefined;
+  previousNode: any;
 }

@@ -7,6 +7,13 @@ class UtilityHelper {
   public static getRamdonNumber(min: number, max: number) {
     return min + Math.floor(Math.random() * (max - min + 1));
   }
+
+  /**
+   * sleep for the specified amount of time
+   */
+  public static sleep = (milliseconds: number) => {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+  };
 }
 
 export default UtilityHelper;

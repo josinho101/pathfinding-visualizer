@@ -85,7 +85,7 @@
   background-image: url(../images/dot.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-color: #e5f19c;
+  border: 0px;
 }
 
 .brick {
