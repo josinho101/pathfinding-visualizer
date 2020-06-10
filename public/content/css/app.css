@@ -69,7 +69,8 @@
   background-image: url(../images/home.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-color: #a1d5f7;
+  /*background-color: #a1d5f7;*/
+  background-color: #baff00;
   cursor: grab;
 }
 
@@ -77,12 +78,14 @@
   background-image: url(../images/man.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-color: #a1d5f7;
+  /*background-color: #a1d5f7;*/
+  background-color: #baff00;
   cursor: grab;
 }
 
 .path {
-  background-image: url(../images/dot.png);
+  /*background-image: url(../images/dot.png);*/
+  background-color: #baff00;
   background-repeat: no-repeat;
   background-position: center;
   border: 0px;
@@ -95,5 +98,6 @@
 }
 
 .visited {
-  background-color: #663399;
+  /*background-color: #663399;*/
+  background-color: #256f7947;
 }

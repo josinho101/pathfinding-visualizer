@@ -42,6 +42,30 @@ const StageControls: React.FunctionComponent<Props> = (props) => {
               </a>
             </div>
           </li>
+          <li className="nav-item dropdown active">
+            <a
+              className="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Random Bricks
+            </a>
+            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a className="dropdown-item" href="#">
+                Blank Terrain
+              </a>
+              <a className="dropdown-item" href="#">
+                Random Bricks
+              </a>
+              <a className="dropdown-item" href="#">
+                J Terrain
+              </a>
+            </div>
+          </li>
           <li className="nav-item dropdown">
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button

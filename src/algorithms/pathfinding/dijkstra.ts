@@ -28,7 +28,9 @@ class Dijkstra implements IPathFinder {
       this.sortNodeByDistance(unvisitedNodes);
       let adjacentNode = unvisitedNodes.shift();
       if (adjacentNode) {
-        //TOdo - add logic for brick
+        if (adjacentNode.isBrick) {
+          continue;
+        }
 
         if (adjacentNode.distance === Infinity) {
           break;

@@ -7,6 +7,7 @@ export default interface Node {
   isStart: boolean;
   isDestination: boolean;
   isVisited: boolean;
+  isBrick: boolean;
   distance: number;
   previousNode: any;
 }

@@ -43,6 +43,7 @@ class NodeHelper {
       distance: Infinity,
       previousNode: undefined,
       isVisited: false,
+      isBrick: false,
       isStart: row === startRow && column === startColumn,
       isDestination: row === destinationRow && column === destinationColumn,
     };

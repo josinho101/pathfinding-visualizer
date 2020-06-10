@@ -5,6 +5,7 @@ import Node from "../grid/typings/node";
 import StageControls from "./stagecontrols";
 import NodeHelper from "../../helper/nodehelper";
 import NodeDescriptor from "../grid/nodedescriptor";
+import TerrainEngine from "../../algorithms/terrain/terrainengine";
 import PathFindingEngine from "../../algorithms/pathfinding/pathfindingengine";
 
 interface State {
@@ -45,6 +46,10 @@ class Stage extends React.Component<Props, State> {
       this.numberOfColumns,
       this.nodePositions
     );
+
+    const terrainEngine = new TerrainEngine(this.nodes);
+    terrainEngine.setTerrain(enums.TerrainType.RandomBricks);
+    console.log(this.nodes);
   }
 
   render() {

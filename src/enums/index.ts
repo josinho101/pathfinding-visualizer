@@ -17,3 +17,12 @@ export enum NodeType {
 export enum Algorithm {
   Dijkstra = 1,
 }
+
+/**
+ * enum for different terrains
+ */
+export enum TerrainType {
+  None = 0,
+  RandomBricks = 1,
+  JTerrain = 2,
+}

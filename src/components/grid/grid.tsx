@@ -21,7 +21,8 @@ const Grid: React.FunctionComponent<Props> = (props) => {
         className={classNames(
           "node",
           { start: node.isStart },
-          { destination: node.isDestination }
+          { destination: node.isDestination },
+          { brick: node.isBrick }
         )}
         onDragStart={props.onNodeDragStart}
         onDragEnd={props.onNodeDropEnd}
