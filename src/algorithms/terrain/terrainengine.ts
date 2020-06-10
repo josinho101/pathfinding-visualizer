@@ -21,16 +21,20 @@ class TerrainEngine {
   public setTerrain(terrainType: enums.TerrainType) {
     let terrainGenerator: ITerrainGenerator;
 
-    switch (terrainType) {
-      case enums.TerrainType.RandomBricks:
-        terrainGenerator = new RandomTerrain(this.nodes);
-        break;
-      default:
-        throw new Error("Terrain not found :|");
-    }
+    try {
+      switch (terrainType) {
+        case enums.TerrainType.RandomBricks:
+          terrainGenerator = new RandomTerrain(this.nodes);
+          break;
+        default:
+          throw new Error("Terrain not found :|");
+      }
 
-    let terrain = terrainGenerator.getTerrain();
-    this.mapTerrainToNodes(this.nodes, terrain);
+      let terrain = terrainGenerator.getTerrain();
+      this.mapTerrainToNodes(this.nodes, terrain);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   /**

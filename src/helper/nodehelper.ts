@@ -2,6 +2,7 @@ import * as enums from "../enums";
 import * as constants from "../constants";
 import UtilityHelper from "./utilityhelper";
 import Node from "../components/grid/typings/node";
+import DropdownOption from "../components/common/typings/dropdownoption";
 
 class NodeHelper {
   /**
@@ -157,6 +158,44 @@ class NodeHelper {
    */
   public static getNodeFromDOM(row: number, column: number) {
     return document.getElementById(`node-${row}-${column}`);
+  }
+
+  /**
+   * get algorithm options for dropdown
+   * @param selectedAlgorithm selected algorithm
+   */
+  public static getAlgorithmOptions(selectedAlgorithm: enums.Algorithm) {
+    let options: DropdownOption[] = [];
+
+    let none: DropdownOption = {
+      id: enums.Algorithm.Dijkstra,
+      value: NodeHelper.getAlgorithmName(enums.Algorithm.Dijkstra),
+      isSelected: false,
+    };
+
+    options.push(none);
+
+    for (let option of options) {
+      option.isSelected = option.id === selectedAlgorithm;
+    }
+
+    return options;
+  }
+
+  /**
+   * get algorithm name
+   * @param type algorithm type
+   */
+  public static getAlgorithmName(type: enums.Algorithm) {
+    let name = "";
+
+    switch (type) {
+      case enums.Algorithm.Dijkstra:
+        name = "Dijkstra's";
+        break;
+    }
+
+    return name;
   }
 }
 

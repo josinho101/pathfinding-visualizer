@@ -101,3 +101,7 @@
   /*background-color: #663399;*/
   background-color: #256f7947;
 }
+
+.terrain-selected-item {
+  width: 125px;
+}

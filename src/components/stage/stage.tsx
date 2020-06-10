@@ -5,8 +5,10 @@ import Node from "../grid/typings/node";
 import StageControls from "./stagecontrols";
 import NodeHelper from "../../helper/nodehelper";
 import NodeDescriptor from "../grid/nodedescriptor";
+import DropdownOption from "../common/typings/dropdownoption";
 import TerrainEngine from "../../algorithms/terrain/terrainengine";
 import PathFindingEngine from "../../algorithms/pathfinding/pathfindingengine";
+import TerrainHelper from "../../helper/terrainhelper";
 
 interface State {
   renderedOn: number;
@@ -33,6 +35,9 @@ class Stage extends React.Component<Props, State> {
   // holds node position.
   private nodePositions: number[][];
 
+  // selected terrain
+  private selectedTerrain = enums.TerrainType.None;
+
   /**
    * constructor for stage component
    */
@@ -46,16 +51,18 @@ class Stage extends React.Component<Props, State> {
       this.numberOfColumns,
       this.nodePositions
     );
-
-    const terrainEngine = new TerrainEngine(this.nodes);
-    terrainEngine.setTerrain(enums.TerrainType.RandomBricks);
-    console.log(this.nodes);
   }
 
   render() {
     return (
       <div className="stage">
-        <StageControls onVisualizeClick={this.onVisualizeClick} />
+        <StageControls
+          onVisualizeClick={this.onVisualizeClick}
+          onTerrainOptionSelected={this.onTerrainOptionSelected}
+          selectedTerrain={this.selectedTerrain}
+          onAlgorithmSelected={this.onAlgorithmOptionSelected}
+          selectedAlgorithm={this.selectedAlgorithm}
+        />
         <NodeDescriptor />
         <Grid
           id="grid"
@@ -66,6 +73,33 @@ class Stage extends React.Component<Props, State> {
       </div>
     );
   }
+
+  /**
+   * triggered when algorithm option is selected
+   */
+  private onAlgorithmOptionSelected = (option: DropdownOption) => {
+    this.selectedAlgorithm = option.id;
+    this.setState({ renderedOn: Date.now() });
+  };
+
+  /**
+   * triggered when terrain option is selected
+   */
+  private onTerrainOptionSelected = (option: DropdownOption) => {
+    if (this.selectedTerrain !== option.id) {
+      this.selectedTerrain = option.id;
+
+      // remove all bricks from stage
+      TerrainHelper.removeAllBrickNode(this.nodes);
+
+      if (this.selectedTerrain !== enums.TerrainType.None) {
+        const terrainEngine = new TerrainEngine(this.nodes);
+        terrainEngine.setTerrain(this.selectedTerrain);
+      }
+
+      this.setState({ renderedOn: Date.now() });
+    }
+  };
 
   /**
    * triggered when visualize button is clicked

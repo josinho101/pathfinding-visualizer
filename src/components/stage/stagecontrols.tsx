@@ -1,15 +1,24 @@
 import React from "react";
+import * as enums from "../../enums";
+import Dropdown from "../common/dropdown";
+import DropdownOption from "../common/typings/dropdownoption";
+import TerrainHelper from "../../helper/terrainhelper";
+import NodeHelper from "../../helper/nodehelper";
 
 interface Props {
   onVisualizeClick: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
+  onAlgorithmSelected: (option: DropdownOption) => void;
+  onTerrainOptionSelected: (option: DropdownOption) => void;
+  selectedTerrain: enums.TerrainType;
+  selectedAlgorithm: enums.Algorithm;
 }
 
 const StageControls: React.FunctionComponent<Props> = (props) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <span className="navbar-brand title">Path finding algorithm</span>
+      <span className="navbar-brand title">Shortest path algorithm</span>
       <button
         className="navbar-toggler"
         type="button"
@@ -24,49 +33,18 @@ const StageControls: React.FunctionComponent<Props> = (props) => {
 
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item dropdown active">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Dijkstra's
-            </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a className="dropdown-item" href="#">
-                Dijkstra's
-              </a>
-            </div>
-          </li>
-          <li className="nav-item dropdown active">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Random Bricks
-            </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a className="dropdown-item" href="#">
-                Blank Terrain
-              </a>
-              <a className="dropdown-item" href="#">
-                Random Bricks
-              </a>
-              <a className="dropdown-item" href="#">
-                J Terrain
-              </a>
-            </div>
-          </li>
-          <li className="nav-item dropdown">
+          <Dropdown
+            id="algorithm-dropdown"
+            onOptionSelected={props.onAlgorithmSelected}
+            options={NodeHelper.getAlgorithmOptions(props.selectedAlgorithm)}
+          />
+          <Dropdown
+            id="terrain-dropdown"
+            onOptionSelected={props.onTerrainOptionSelected}
+            classname="terrain-selected-item"
+            options={TerrainHelper.getTerrainOption(props.selectedTerrain)}
+          />
+          <li className="nav-item">
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button
               className="btn btn-success"
