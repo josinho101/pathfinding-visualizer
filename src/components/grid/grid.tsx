@@ -1,13 +1,20 @@
 import React from "react";
 import Node from "./typings/node";
 import classNames from "classnames";
-import * as enums from "../../enums";
 
 interface Props {
   id: string;
   nodes: Node[][];
-  onNodeDragStart: (event: React.DragEvent<HTMLDivElement>) => void;
-  onNodeDropEnd: (event: React.DragEvent<HTMLDivElement>) => void;
+  isPathFindingInProgress: boolean;
+  onNodeDragStart: (e: React.DragEvent<HTMLDivElement>) => void;
+  onNodeDropEnd: (e: React.DragEvent<HTMLDivElement>) => void;
+  onNodeMouseEnter: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onGridContainerMouseDown: (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
+  onGridContainerMouseUp: (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
 }
 
 const Grid: React.FunctionComponent<Props> = (props) => {
@@ -24,6 +31,7 @@ const Grid: React.FunctionComponent<Props> = (props) => {
           { destination: node.isDestination },
           { brick: node.isBrick }
         )}
+        onMouseEnter={props.onNodeMouseEnter}
         onDragStart={props.onNodeDragStart}
         onDragEnd={props.onNodeDropEnd}
         onDragOver={(e) => {
@@ -68,7 +76,14 @@ const Grid: React.FunctionComponent<Props> = (props) => {
   };
 
   return (
-    <div id={props.id} className="node-container">
+    <div
+      id={props.id}
+      className={classNames("node-container", {
+        "block-mouse-events": props.isPathFindingInProgress,
+      })}
+      onMouseDown={props.onGridContainerMouseDown}
+      onMouseUp={props.onGridContainerMouseUp}
+    >
       {generateGrid(props.nodes)}
     </div>
   );

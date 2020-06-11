@@ -13,6 +13,7 @@ interface Props {
   onTerrainOptionSelected: (option: DropdownOption) => void;
   selectedTerrain: enums.TerrainType;
   selectedAlgorithm: enums.Algorithm;
+  isPathFindingInProgress: boolean;
 }
 
 const StageControls: React.FunctionComponent<Props> = (props) => {
@@ -35,13 +36,15 @@ const StageControls: React.FunctionComponent<Props> = (props) => {
         <ul className="navbar-nav mr-auto">
           <Dropdown
             id="algorithm-dropdown"
+            disabled={props.isPathFindingInProgress}
             onOptionSelected={props.onAlgorithmSelected}
             options={NodeHelper.getAlgorithmOptions(props.selectedAlgorithm)}
           />
           <Dropdown
             id="terrain-dropdown"
-            onOptionSelected={props.onTerrainOptionSelected}
             classname="terrain-selected-item"
+            disabled={props.isPathFindingInProgress}
+            onOptionSelected={props.onTerrainOptionSelected}
             options={TerrainHelper.getTerrainOption(props.selectedTerrain)}
           />
           <li className="nav-item">
@@ -49,6 +52,7 @@ const StageControls: React.FunctionComponent<Props> = (props) => {
             <button
               className="btn btn-success"
               onClick={props.onVisualizeClick}
+              disabled={props.isPathFindingInProgress}
             >
               Visualize
             </button>

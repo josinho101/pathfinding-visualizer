@@ -4,6 +4,7 @@ import DropdownOption from "./typings/dropdownoption";
 
 interface Props {
   id: string;
+  disabled?: boolean;
   options: DropdownOption[];
   classname?: string;
   onOptionSelected: (option: DropdownOption) => void;
@@ -45,7 +46,9 @@ const Dropdown: React.FunctionComponent<Props> = (props) => {
   return (
     <li id={props.id} className="nav-item dropdown active">
       <a
-        className={classNames("nav-link dropdown-toggle", props.classname)}
+        className={classNames("nav-link dropdown-toggle", props.classname, {
+          disabled: props.disabled,
+        })}
         href="#"
         id="navbarDropdown"
         role="button"

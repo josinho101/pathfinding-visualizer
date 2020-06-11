@@ -101,6 +101,23 @@ class NodeHelper {
   }
 
   /**
+   * toggle brick class
+   * @param element html element
+   */
+  public static toggleBrick(element: HTMLElement, grid: Node[][]) {
+    if (
+      element &&
+      NodeHelper.isNode(element) &&
+      !NodeHelper.isStartNode(element) &&
+      !NodeHelper.isDestinationNode(element)
+    ) {
+      let position = NodeHelper.getNodePositionFromElemet(element);
+      let node = grid[position[0]][position[1]];
+      node.isBrick = !node.isBrick;
+    }
+  }
+
+  /**
    * return node type of element
    * @param element  element
    */
@@ -149,6 +166,8 @@ class NodeHelper {
       let idParts = id.split("-");
       return [parseInt(idParts[1]), parseInt(idParts[2])];
     }
+
+    return [];
   }
 
   /**

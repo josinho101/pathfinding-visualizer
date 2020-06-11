@@ -38,6 +38,12 @@ class Stage extends React.Component<Props, State> {
   // selected terrain
   private selectedTerrain = enums.TerrainType.None;
 
+  // holds boolean flag for pan started or not
+  private isPanStarted = false;
+
+  // holds flag if path fining is in progress or not
+  private isPathFindingInProgress = false;
+
   /**
    * constructor for stage component
    */
@@ -62,24 +68,65 @@ class Stage extends React.Component<Props, State> {
           selectedTerrain={this.selectedTerrain}
           onAlgorithmSelected={this.onAlgorithmOptionSelected}
           selectedAlgorithm={this.selectedAlgorithm}
+          isPathFindingInProgress={this.isPathFindingInProgress}
         />
         <NodeDescriptor />
         <Grid
           id="grid"
           nodes={this.nodes}
-          onNodeDragStart={this.onNodeDragStart}
           onNodeDropEnd={this.onNodeDropEnd}
+          onNodeDragStart={this.onNodeDragStart}
+          onNodeMouseEnter={this.onNodeMouseEnter}
+          onGridContainerMouseUp={this.onGridContainerMouseUp}
+          onGridContainerMouseDown={this.onGridContainerMouseDown}
+          isPathFindingInProgress={this.isPathFindingInProgress}
         />
       </div>
     );
   }
 
   /**
+   * mouse up event for grid container
+   */
+  private onGridContainerMouseUp = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    this.isPanStarted = false;
+  };
+
+  /**
+   * mouse down event for grid container
+   */
+  private onGridContainerMouseDown = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    let target: any = e.target;
+    this.isPanStarted = true;
+    NodeHelper.toggleBrick(target, this.nodes);
+    this.setState({ renderedOn: Date.now() });
+  };
+
+  /**
+   * on mouse enter of node
+   */
+  private onNodeMouseEnter = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (this.isPanStarted) {
+      let target: any = e.target;
+      NodeHelper.toggleBrick(target, this.nodes);
+      this.setState({ renderedOn: Date.now() });
+    }
+  };
+
+  /**
    * triggered when algorithm option is selected
    */
   private onAlgorithmOptionSelected = (option: DropdownOption) => {
-    this.selectedAlgorithm = option.id;
-    this.setState({ renderedOn: Date.now() });
+    if (this.selectedAlgorithm !== option.id) {
+      this.selectedAlgorithm = option.id;
+      this.setState({ renderedOn: Date.now() });
+    }
   };
 
   /**
@@ -89,7 +136,7 @@ class Stage extends React.Component<Props, State> {
     if (this.selectedTerrain !== option.id) {
       this.selectedTerrain = option.id;
 
-      // remove all bricks from stage
+      // remove all bricks from stage before applying new terrain
       TerrainHelper.removeAllBrickNode(this.nodes);
 
       if (this.selectedTerrain !== enums.TerrainType.None) {
@@ -104,9 +151,12 @@ class Stage extends React.Component<Props, State> {
   /**
    * triggered when visualize button is clicked
    */
-  private onVisualizeClick = (
+  private onVisualizeClick = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    this.isPathFindingInProgress = true;
+    this.setState({ renderedOn: Date.now() });
+
     const startRow = this.nodePositions[0][0];
     const startColumn = this.nodePositions[0][1];
     const destinationRow = this.nodePositions[1][0];
@@ -114,10 +164,19 @@ class Stage extends React.Component<Props, State> {
 
     let startNode = this.nodes[startRow][startColumn];
     startNode.isStart = true;
+
     let destinationNode = this.nodes[destinationRow][destinationColumn];
     destinationNode.isDestination = true;
+
     let pathfindingEngine = new PathFindingEngine(this.nodes);
-    pathfindingEngine.find(startNode, destinationNode, this.selectedAlgorithm);
+    await pathfindingEngine.find(
+      startNode,
+      destinationNode,
+      this.selectedAlgorithm
+    );
+
+    this.isPathFindingInProgress = false;
+    this.setState({ renderedOn: Date.now() });
   };
 
   /**
@@ -170,6 +229,7 @@ class Stage extends React.Component<Props, State> {
     }
 
     this.draggedNodeType = enums.NodeType.None;
+    this.isPanStarted = false;
   };
 }
 

@@ -105,3 +105,7 @@
 .terrain-selected-item {
   width: 125px;
 }
+
+.block-mouse-events {
+  pointer-events: none;
+}

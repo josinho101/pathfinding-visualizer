@@ -16,7 +16,7 @@ class RandomTerrain implements ITerrainGenerator {
   /**
    * get terrain
    */
-  getTerrain(): number[][] {
+  public getTerrain(): number[][] {
     let terrain: number[][] = [];
 
     for (let row of this.nodes) {

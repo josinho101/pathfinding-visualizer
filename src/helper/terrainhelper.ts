@@ -22,8 +22,8 @@ class TerrainHelper {
     };
 
     let JTerrain: DropdownOption = {
-      id: enums.TerrainType.JTerrain,
-      value: TerrainHelper.getTerrainName(enums.TerrainType.JTerrain),
+      id: enums.TerrainType.DiagonalLines,
+      value: TerrainHelper.getTerrainName(enums.TerrainType.DiagonalLines),
       isSelected: false,
     };
 
@@ -47,13 +47,13 @@ class TerrainHelper {
 
     switch (type) {
       case enums.TerrainType.None:
-        name = "Blank Terrain";
+        name = "Blank terrain";
         break;
       case enums.TerrainType.RandomBricks:
-        name = "Random Bricks";
+        name = "Random bricks";
         break;
-      case enums.TerrainType.JTerrain:
-        name = "J Terrain";
+      case enums.TerrainType.DiagonalLines:
+        name = "Diagonal lines";
         break;
     }
 

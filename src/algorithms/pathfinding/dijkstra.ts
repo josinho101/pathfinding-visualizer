@@ -53,7 +53,7 @@ class Dijkstra implements IPathFinder {
       nodesInShortestPath.unshift(currentNode);
       currentNode = currentNode.previousNode;
     }
-    console.log(nodesInShortestPath);
+
     return [visitedNodes, nodesInShortestPath];
   };
 

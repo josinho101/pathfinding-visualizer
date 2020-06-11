@@ -1,6 +1,7 @@
-import ITerrainGenerator from "./iterraingenerator";
 import * as enums from "../../enums";
+import DiagonalLineTerrain from "./diagonallineterrain";
 import RandomTerrain from "./randomterrain";
+import ITerrainGenerator from "./iterraingenerator";
 import Node from "../../components/grid/typings/node";
 
 class TerrainEngine {
@@ -25,6 +26,9 @@ class TerrainEngine {
       switch (terrainType) {
         case enums.TerrainType.RandomBricks:
           terrainGenerator = new RandomTerrain(this.nodes);
+          break;
+        case enums.TerrainType.DiagonalLines:
+          terrainGenerator = new DiagonalLineTerrain(this.nodes);
           break;
         default:
           throw new Error("Terrain not found :|");

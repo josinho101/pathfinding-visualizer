@@ -24,5 +24,5 @@ export enum Algorithm {
 export enum TerrainType {
   None = 0,
   RandomBricks = 1,
-  JTerrain = 2,
+  DiagonalLines = 2,
 }
