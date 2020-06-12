@@ -2,16 +2,19 @@ import React from "react";
 import Grid from "../grid/grid";
 import * as enums from "../../enums";
 import Node from "../grid/typings/node";
+import settings from "../../appsettings";
 import StageControls from "./stagecontrols";
 import NodeHelper from "../../helper/nodehelper";
 import NodeDescriptor from "../grid/nodedescriptor";
+import TerrainHelper from "../../helper/terrainhelper";
 import DropdownOption from "../common/typings/dropdownoption";
 import TerrainEngine from "../../algorithms/terrain/terrainengine";
 import PathFindingEngine from "../../algorithms/pathfinding/pathfindingengine";
-import TerrainHelper from "../../helper/terrainhelper";
+import PathFindingOptions from "../../algorithms/pathfinding/pathfindingoptions";
 
 interface State {
   renderedOn: number;
+  renderNodes: boolean;
 }
 
 interface Props {}
@@ -27,13 +30,13 @@ class Stage extends React.Component<Props, State> {
   private draggedNodeType = enums.NodeType.None;
 
   // holds nodes
-  private nodes: Node[][];
+  private nodes: Node[][] = [];
 
   // selected path finding algorithm
   private selectedAlgorithm = enums.Algorithm.Dijkstra;
 
   // holds node position.
-  private nodePositions: number[][];
+  private nodePositions: number[][] = [];
 
   // selected terrain
   private selectedTerrain = enums.TerrainType.None;
@@ -44,25 +47,27 @@ class Stage extends React.Component<Props, State> {
   // holds flag if path fining is in progress or not
   private isPathFindingInProgress = false;
 
+  // hold defult animation speed
+  private animationSpeed: number = settings.animationSpeed.default;
+
   /**
    * constructor for stage component
    */
   constructor(props: Props, state: State) {
     super(props, state);
-
-    // initialize nodes for grid
-    this.nodePositions = NodeHelper.getDefaultNodePosition();
-    this.nodes = NodeHelper.initNodes(
-      this.numberOfRows,
-      this.numberOfColumns,
-      this.nodePositions
-    );
+    this.state = {
+      renderedOn: 0,
+      renderNodes: true,
+    };
+    this.resetStage(false);
   }
 
   render() {
     return (
       <div className="stage">
         <StageControls
+          onSpeedChange={this.onSpeedChange}
+          onResetStage={this.onResetStage}
           onVisualizeClick={this.onVisualizeClick}
           onTerrainOptionSelected={this.onTerrainOptionSelected}
           selectedTerrain={this.selectedTerrain}
@@ -71,19 +76,48 @@ class Stage extends React.Component<Props, State> {
           isPathFindingInProgress={this.isPathFindingInProgress}
         />
         <NodeDescriptor />
-        <Grid
-          id="grid"
-          nodes={this.nodes}
-          onNodeDropEnd={this.onNodeDropEnd}
-          onNodeDragStart={this.onNodeDragStart}
-          onNodeMouseEnter={this.onNodeMouseEnter}
-          onGridContainerMouseUp={this.onGridContainerMouseUp}
-          onGridContainerMouseDown={this.onGridContainerMouseDown}
-          isPathFindingInProgress={this.isPathFindingInProgress}
-        />
+        {this.state.renderNodes ? (
+          <Grid
+            id="grid"
+            nodes={this.nodes}
+            onNodeDropEnd={this.onNodeDropEnd}
+            onNodeDragStart={this.onNodeDragStart}
+            onNodeMouseEnter={this.onNodeMouseEnter}
+            onGridContainerMouseUp={this.onGridContainerMouseUp}
+            onGridContainerMouseDown={this.onGridContainerMouseDown}
+            isPathFindingInProgress={this.isPathFindingInProgress}
+          />
+        ) : null}
       </div>
     );
   }
+
+  /**
+   * set animation speed
+   * @param index index of speed
+   */
+  private setAnimationSpeed = (index = 0) => {
+    this.animationSpeed = NodeHelper.getAnimationSpeed(
+      index === 0 ? settings.animationSpeed.default : index
+    );
+  };
+
+  /**
+   * get animation speed
+   */
+  private getAnimationSpeed = () => {
+    return this.animationSpeed;
+  };
+
+  /**
+   * on animation speed change
+   * @param event event
+   */
+  private onSpeedChange = (event: React.ChangeEvent<HTMLElement>) => {
+    let target: any = event.target;
+    let weight = parseInt(target.value);
+    this.setAnimationSpeed(weight);
+  };
 
   /**
    * mouse up event for grid container
@@ -151,6 +185,15 @@ class Stage extends React.Component<Props, State> {
   /**
    * triggered when visualize button is clicked
    */
+  private onResetStage = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    this.resetStage();
+  };
+
+  /**
+   * triggered when visualize button is clicked
+   */
   private onVisualizeClick = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -168,7 +211,11 @@ class Stage extends React.Component<Props, State> {
     let destinationNode = this.nodes[destinationRow][destinationColumn];
     destinationNode.isDestination = true;
 
-    let pathfindingEngine = new PathFindingEngine(this.nodes);
+    let options: PathFindingOptions = {
+      getAnimationSpeed: this.getAnimationSpeed,
+    };
+
+    let pathfindingEngine = new PathFindingEngine(this.nodes, options);
     await pathfindingEngine.find(
       startNode,
       destinationNode,
@@ -230,6 +277,27 @@ class Stage extends React.Component<Props, State> {
 
     this.draggedNodeType = enums.NodeType.None;
     this.isPanStarted = false;
+  };
+
+  /**
+   * reset stage
+   */
+  private resetStage = (doRerenderNodes: boolean = true) => {
+    this.selectedTerrain = enums.TerrainType.None;
+    this.nodePositions = NodeHelper.getDefaultNodePosition();
+    this.nodes = NodeHelper.initNodes(
+      this.numberOfRows,
+      this.numberOfColumns,
+      this.nodePositions
+    );
+
+    if (doRerenderNodes) {
+      this.setState({ renderNodes: false }, () => {
+        setTimeout(() => {
+          this.setState({ renderNodes: true });
+        }, 0);
+      });
+    }
   };
 }
 

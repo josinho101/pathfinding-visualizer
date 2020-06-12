@@ -6,6 +6,14 @@ import DropdownOption from "../components/common/typings/dropdownoption";
 
 class NodeHelper {
   /**
+   * return sorting speed
+   */
+  public static getAnimationSpeed = (index: number) => {
+    let speed = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+    return speed[index - 1];
+  };
+
+  /**
    * return start and destination node poistion.
    */
   public static getDefaultNodePosition = () => {

@@ -25,4 +25,5 @@ export enum TerrainType {
   None = 0,
   RandomBricks = 1,
   DiagonalLines = 2,
+  RecursiveDivision = 3,
 }

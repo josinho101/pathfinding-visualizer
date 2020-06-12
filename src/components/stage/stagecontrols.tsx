@@ -9,6 +9,8 @@ interface Props {
   onVisualizeClick: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
+  onResetStage: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onSpeedChange: (e: React.ChangeEvent<HTMLElement>) => void;
   onAlgorithmSelected: (option: DropdownOption) => void;
   onTerrainOptionSelected: (option: DropdownOption) => void;
   selectedTerrain: enums.TerrainType;
@@ -17,6 +19,12 @@ interface Props {
 }
 
 const StageControls: React.FunctionComponent<Props> = (props) => {
+  const speedRangeOptions = {
+    min: 1,
+    max: 10,
+    default: 5,
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <span className="navbar-brand title">Shortest path algorithm</span>
@@ -59,11 +67,23 @@ const StageControls: React.FunctionComponent<Props> = (props) => {
           </li>
           <li className="nav-item dropdown">
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button className="btn btn-warning">Reset board</button>
+            <button
+              className="btn btn-warning"
+              onClick={props.onResetStage}
+              disabled={props.isPathFindingInProgress}
+            >
+              Reset board
+            </button>
           </li>
           <li className="range">
             <p>Visualizing speed</p>
-            <input type="range" />
+            <input
+              type="range"
+              min={speedRangeOptions.min}
+              max={speedRangeOptions.max}
+              defaultValue={speedRangeOptions.default}
+              onChange={props.onSpeedChange}
+            />
           </li>
         </ul>
       </div>

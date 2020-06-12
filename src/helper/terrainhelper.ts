@@ -15,10 +15,16 @@ class TerrainHelper {
       isSelected: false,
     };
 
+    let recursiveDivision: DropdownOption = {
+      id: enums.TerrainType.RecursiveDivision,
+      value: TerrainHelper.getTerrainName(enums.TerrainType.RecursiveDivision),
+      isSelected: false,
+    };
+
     let randomBricks: DropdownOption = {
       id: enums.TerrainType.RandomBricks,
       value: TerrainHelper.getTerrainName(enums.TerrainType.RandomBricks),
-      isSelected: true,
+      isSelected: false,
     };
 
     let JTerrain: DropdownOption = {
@@ -28,6 +34,7 @@ class TerrainHelper {
     };
 
     options.push(none);
+    options.push(recursiveDivision);
     options.push(randomBricks);
     options.push(JTerrain);
 
@@ -54,6 +61,9 @@ class TerrainHelper {
         break;
       case enums.TerrainType.DiagonalLines:
         name = "Diagonal lines";
+        break;
+      case enums.TerrainType.RecursiveDivision:
+        name = "Recursive division";
         break;
     }
 

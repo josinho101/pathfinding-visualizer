@@ -1,16 +1,21 @@
-import Node from "../../components/grid/typings/node";
-import IPathFinder from "./ipathfinder";
-import * as enums from "../../enums";
 import Dijkstra from "./dijkstra";
-import UtilityHelper from "../../helper/utilityhelper";
+import * as enums from "../../enums";
+import IPathFinder from "./ipathfinder";
 import NodeHelper from "../../helper/nodehelper";
+import PathFindingOptions from "./pathfindingoptions";
+import Node from "../../components/grid/typings/node";
+import UtilityHelper from "../../helper/utilityhelper";
 
 class PathFindingEngine {
   // holds nodes
   private nodes: Node[][];
 
-  constructor(nodes: Node[][]) {
+  // path finding options
+  private options: PathFindingOptions;
+
+  constructor(nodes: Node[][], options: PathFindingOptions) {
     this.nodes = nodes;
+    this.options = options;
   }
 
   /**
@@ -53,7 +58,7 @@ class PathFindingEngine {
             nodeElement?.classList.remove("visited");
             nodeElement?.classList.add("path");
 
-            await UtilityHelper.sleep(10);
+            await UtilityHelper.sleep(this.options.getAnimationSpeed());
           }
         }
       }
@@ -64,7 +69,7 @@ class PathFindingEngine {
         nodeElement?.classList.add("visited");
       }
 
-      await UtilityHelper.sleep(10);
+      await UtilityHelper.sleep(this.options.getAnimationSpeed());
     }
   };
 

@@ -1,8 +1,9 @@
 import * as enums from "../../enums";
-import DiagonalLineTerrain from "./diagonallineterrain";
 import RandomTerrain from "./randomterrain";
+import RecursiveDivision from "./recursivedivision";
 import ITerrainGenerator from "./iterraingenerator";
 import Node from "../../components/grid/typings/node";
+import DiagonalLineTerrain from "./diagonallineterrain";
 
 class TerrainEngine {
   // holds nodes
@@ -29,6 +30,9 @@ class TerrainEngine {
           break;
         case enums.TerrainType.DiagonalLines:
           terrainGenerator = new DiagonalLineTerrain(this.nodes);
+          break;
+        case enums.TerrainType.RecursiveDivision:
+          terrainGenerator = new RecursiveDivision(this.nodes);
           break;
         default:
           throw new Error("Terrain not found :|");

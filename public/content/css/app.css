@@ -51,6 +51,10 @@
   background-color: white;
 }
 
+.node-container div {
+  transition: background-image 0.2s ease-in-out;
+}
+
 .row {
   margin: 0px;
   display: flex;
@@ -103,7 +107,7 @@
 }
 
 .terrain-selected-item {
-  width: 125px;
+  width: 135px;
 }
 
 .block-mouse-events {
