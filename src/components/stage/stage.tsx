@@ -170,15 +170,14 @@ class Stage extends React.Component<Props, State> {
     if (this.selectedTerrain !== option.id) {
       this.selectedTerrain = option.id;
 
-      // remove all bricks from stage before applying new terrain
-      TerrainHelper.removeAllBrickNode(this.nodes);
+      this.setState({ renderNodes: false }, () => {
+        if (this.selectedTerrain !== enums.TerrainType.None) {
+          const terrainEngine = new TerrainEngine(this.nodes);
+          terrainEngine.setTerrain(this.selectedTerrain);
+        }
 
-      if (this.selectedTerrain !== enums.TerrainType.None) {
-        const terrainEngine = new TerrainEngine(this.nodes);
-        terrainEngine.setTerrain(this.selectedTerrain);
-      }
-
-      this.setState({ renderedOn: Date.now() });
+        this.setState({ renderedOn: Date.now(), renderNodes: true });
+      });
     }
   };
 
