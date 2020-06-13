@@ -14,71 +14,58 @@ class RecursiveDivision implements ITerrainGenerator {
   }
 
   /**
-   * toggle direction
-   * @param direction direction
-   */
-  private toggleDirection(direction: Direction) {
-    return 1 - direction;
-  }
-
-  /**
    * Divide grid
    * @param terrain terrain
    * @param rowStart row start
    * @param rowEnd row end
    * @param colStart column start
    * @param colEnd column end
-   * @param direction direct of division
    */
   private divide(
     terrain: number[][],
     rowStart: number,
     rowEnd: number,
     colStart: number,
-    colEnd: number,
-    direction: Direction
+    colEnd: number
   ) {
-    if (colEnd - colStart <= 3 || rowEnd - rowStart <= 3) {
+    if (colEnd - colStart <= 0 || rowEnd - rowStart <= 0) {
       return;
     }
 
-    let newDirection = this.toggleDirection(direction);
-    if (direction === Direction.Vertical) {
-      let mid = UtilityHelper.getRamdonNumber(colStart + 1, colEnd - 1);
+    let width = colEnd - colStart + 1;
+    let height = rowEnd - rowStart + 1;
 
-      for (let i = rowStart; i < rowEnd; i++) {
-        let row = terrain[i];
-        if (i === rowStart + 1) {
-          continue;
-        }
+    if (width <= height) {
+      // horizontal cut
+      let row = UtilityHelper.getRamdonNumber(rowStart, rowEnd);
 
-        if (row.length > 0) {
-          row[row.length] = mid;
-        } else {
-          row.push(mid);
-        }
-      }
-
-      this.divide(terrain, rowStart, rowEnd, colStart, mid - 1, newDirection);
-      this.divide(terrain, rowStart, rowEnd, mid + 1, colEnd, newDirection);
-    } else {
-      let index = UtilityHelper.getRamdonNumber(rowStart + 1, rowEnd - 1);
-
-      let row = terrain[index];
       for (let i = colStart; i <= colEnd; i++) {
-        if (i === colStart + 1) {
+        // make a opening at column start
+        if (i === colStart) {
           continue;
         }
 
-        if (row.length > 0) {
-          row[row.length] = i;
-        } else {
-          row.push(i);
-        }
+        terrain[row].push(i);
       }
 
-      this.divide(terrain, rowStart, index - 1, colStart, colEnd, newDirection);
-      this.divide(terrain, index + 1, rowEnd, colStart, colEnd, newDirection);
+      this.divide(terrain, rowStart, row - 2, colStart, colEnd);
+      this.divide(terrain, row + 2, rowEnd, colStart, colEnd);
+    } else {
+      // vertical cut
+      let col = UtilityHelper.getRamdonNumber(colStart, colEnd);
+      let row = UtilityHelper.getRamdonNumber(rowStart, rowEnd);
+
+      for (let i = rowStart; i <= rowEnd; i++) {
+        // make a opening at row start
+        if (i === row) {
+          continue;
+        }
+
+        terrain[i].push(col);
+      }
+
+      this.divide(terrain, rowStart, rowEnd, colStart, col - 2);
+      this.divide(terrain, rowStart, rowEnd, col + 2, colEnd);
     }
   }
 
@@ -96,22 +83,10 @@ class RecursiveDivision implements ITerrainGenerator {
       terrain.push([]);
     });
 
-    this.divide(
-      terrain,
-      rowStart,
-      rowEnd,
-      colStart,
-      colEnd,
-      Direction.Vertical
-    );
+    this.divide(terrain, rowStart, rowEnd, colStart, colEnd);
 
     return terrain;
   }
-}
-
-enum Direction {
-  Vertical,
-  Horizontal,
 }
 
 export default RecursiveDivision;

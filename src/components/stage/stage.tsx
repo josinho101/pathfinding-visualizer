@@ -169,15 +169,14 @@ class Stage extends React.Component<Props, State> {
   private onTerrainOptionSelected = (option: DropdownOption) => {
     if (this.selectedTerrain !== option.id) {
       this.selectedTerrain = option.id;
+      TerrainHelper.removeAllBrickNode(this.nodes);
 
-      this.setState({ renderNodes: false }, () => {
-        if (this.selectedTerrain !== enums.TerrainType.None) {
-          const terrainEngine = new TerrainEngine(this.nodes);
-          terrainEngine.setTerrain(this.selectedTerrain);
-        }
+      if (this.selectedTerrain !== enums.TerrainType.None) {
+        const terrainEngine = new TerrainEngine(this.nodes);
+        terrainEngine.setTerrain(this.selectedTerrain);
+      }
 
-        this.setState({ renderedOn: Date.now(), renderNodes: true });
-      });
+      this.setState({ renderNodes: true });
     }
   };
 
