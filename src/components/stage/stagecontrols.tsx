@@ -72,7 +72,7 @@ const StageControls: React.FunctionComponent<Props> = (props) => {
               onClick={props.onResetStage}
               disabled={props.isPathFindingInProgress}
             >
-              Reset board
+              Reset
             </button>
           </li>
           <li className="range">

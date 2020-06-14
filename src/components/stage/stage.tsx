@@ -59,7 +59,7 @@ class Stage extends React.Component<Props, State> {
       renderedOn: 0,
       renderNodes: true,
     };
-    this.resetStage(false);
+    this.resetStage(enums.TerrainType.None, false);
   }
 
   render() {
@@ -168,15 +168,17 @@ class Stage extends React.Component<Props, State> {
    */
   private onTerrainOptionSelected = (option: DropdownOption) => {
     if (this.selectedTerrain !== option.id) {
-      this.selectedTerrain = option.id;
-      TerrainHelper.removeAllBrickNode(this.nodes);
+      // reset stage on terrain change
+      this.resetStage(option.id, false);
 
-      if (this.selectedTerrain !== enums.TerrainType.None) {
-        const terrainEngine = new TerrainEngine(this.nodes);
-        terrainEngine.setTerrain(this.selectedTerrain);
-      }
+      this.setState({ renderNodes: false }, () => {
+        if (this.selectedTerrain !== enums.TerrainType.None) {
+          const terrainEngine = new TerrainEngine(this.nodes);
+          terrainEngine.setTerrain(this.selectedTerrain);
+        }
 
-      this.setState({ renderNodes: true });
+        this.setState({ renderNodes: true });
+      });
     }
   };
 
@@ -186,7 +188,7 @@ class Stage extends React.Component<Props, State> {
   private onResetStage = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    this.resetStage();
+    this.resetStage(enums.TerrainType.None);
   };
 
   /**
@@ -280,8 +282,11 @@ class Stage extends React.Component<Props, State> {
   /**
    * reset stage
    */
-  private resetStage = (doRerenderNodes: boolean = true) => {
-    this.selectedTerrain = enums.TerrainType.None;
+  private resetStage = (
+    terrain: enums.TerrainType,
+    doRerenderNodes: boolean = true
+  ) => {
+    this.selectedTerrain = terrain;
     this.nodePositions = NodeHelper.getDefaultNodePosition();
     this.nodes = NodeHelper.initNodes(
       this.numberOfRows,
