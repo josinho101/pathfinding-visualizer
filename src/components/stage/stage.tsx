@@ -1,12 +1,12 @@
 import React from "react";
 import Grid from "../grid/grid";
 import * as enums from "../../enums";
+import StageFooter from "./stagefooter";
 import Node from "../grid/typings/node";
 import settings from "../../appsettings";
 import StageControls from "./stagecontrols";
 import NodeHelper from "../../helper/nodehelper";
 import NodeDescriptor from "../grid/nodedescriptor";
-import TerrainHelper from "../../helper/terrainhelper";
 import DropdownOption from "../common/typings/dropdownoption";
 import TerrainEngine from "../../algorithms/terrain/terrainengine";
 import PathFindingEngine from "../../algorithms/pathfinding/pathfindingengine";
@@ -88,6 +88,7 @@ class Stage extends React.Component<Props, State> {
             isPathFindingInProgress={this.isPathFindingInProgress}
           />
         ) : null}
+        <StageFooter selectedAlgorithm={this.selectedAlgorithm} />
       </div>
     );
   }

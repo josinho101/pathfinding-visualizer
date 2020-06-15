@@ -1,3 +1,4 @@
+import Bfs from "./bfs";
 import Dijkstra from "./dijkstra";
 import * as enums from "../../enums";
 import IPathFinder from "./ipathfinder";
@@ -29,20 +30,29 @@ class PathFindingEngine {
     destinationNode: Node,
     algorithm: enums.Algorithm
   ) => {
-    let pathFinder: IPathFinder;
+    try {
+      let pathFinder: IPathFinder;
 
-    switch (algorithm) {
-      case enums.Algorithm.Dijkstra:
-        pathFinder = new Dijkstra(this.nodes);
-        break;
+      switch (algorithm) {
+        case enums.Algorithm.Dijkstra:
+          pathFinder = new Dijkstra(this.nodes);
+          break;
+        case enums.Algorithm.Bfs:
+          pathFinder = new Bfs(this.nodes);
+          break;
+        default:
+          throw new Error("Algorithm implementation not found !!");
+      }
+
+      const [visitedNodes, nodesInShortestPath] = pathFinder.find(
+        startNode,
+        destinationNode
+      );
+
+      await this.animate(visitedNodes, nodesInShortestPath);
+    } catch (e) {
+      console.error(e);
     }
-
-    const [visitedNodes, nodesInShortestPath] = pathFinder.find(
-      startNode,
-      destinationNode
-    );
-
-    await this.animate(visitedNodes, nodesInShortestPath);
   };
 
   private animate = async (

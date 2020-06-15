@@ -194,13 +194,27 @@ class NodeHelper {
   public static getAlgorithmOptions(selectedAlgorithm: enums.Algorithm) {
     let options: DropdownOption[] = [];
 
-    let none: DropdownOption = {
+    let dijkstra: DropdownOption = {
       id: enums.Algorithm.Dijkstra,
       value: NodeHelper.getAlgorithmName(enums.Algorithm.Dijkstra),
       isSelected: false,
     };
 
-    options.push(none);
+    let bfs: DropdownOption = {
+      id: enums.Algorithm.Bfs,
+      value: NodeHelper.getAlgorithmName(enums.Algorithm.Bfs),
+      isSelected: false,
+    };
+
+    let dfs: DropdownOption = {
+      id: enums.Algorithm.Dfs,
+      value: NodeHelper.getAlgorithmName(enums.Algorithm.Dfs),
+      isSelected: false,
+    };
+
+    options.push(dijkstra);
+    options.push(bfs);
+    options.push(dfs);
 
     for (let option of options) {
       option.isSelected = option.id === selectedAlgorithm;
@@ -219,6 +233,12 @@ class NodeHelper {
     switch (type) {
       case enums.Algorithm.Dijkstra:
         name = "Dijkstra's";
+        break;
+      case enums.Algorithm.Bfs:
+        name = "Breadth first search";
+        break;
+      case enums.Algorithm.Dfs:
+        name = "Depth first search";
         break;
     }
 

@@ -27,7 +27,7 @@ const StageControls: React.FunctionComponent<Props> = (props) => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <span className="navbar-brand title">Shortest path algorithm</span>
+      <span className="navbar-brand title">Path finding algorithm</span>
       <button
         className="navbar-toggler"
         type="button"
@@ -44,6 +44,7 @@ const StageControls: React.FunctionComponent<Props> = (props) => {
         <ul className="navbar-nav mr-auto">
           <Dropdown
             id="algorithm-dropdown"
+            classname="algorithm-selected-item"
             disabled={props.isPathFindingInProgress}
             onOptionSelected={props.onAlgorithmSelected}
             options={NodeHelper.getAlgorithmOptions(props.selectedAlgorithm)}

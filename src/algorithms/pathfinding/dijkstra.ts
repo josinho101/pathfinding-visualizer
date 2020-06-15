@@ -1,3 +1,7 @@
+/**
+ * Algorithm ref - https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+ */
+
 import IPathFinder from "./ipathfinder";
 import Node from "../../components/grid/typings/node";
 
@@ -25,20 +29,28 @@ class Dijkstra implements IPathFinder {
     unvisitedNodes = this.flatten2DNodeArray(this.nodes);
 
     while (!!unvisitedNodes.length) {
+      // sort the nodes by distance
       this.sortNodeByDistance(unvisitedNodes);
+
+      // get node with shortest distance
       let adjacentNode = unvisitedNodes.shift();
+
       if (adjacentNode) {
+        // if node is a brick then no need to do check
         if (adjacentNode.isBrick) {
           continue;
         }
 
+        // if distance is inifinity, then it means path finding is blocked
         if (adjacentNode.distance === Infinity) {
           break;
         }
 
+        // set node as visited adn push to visited node array
         adjacentNode.isVisited = true;
         visitedNodes.push(adjacentNode);
 
+        // we had reached the destination, stop searching
         if (adjacentNode === destinationNode) {
           break;
         }
