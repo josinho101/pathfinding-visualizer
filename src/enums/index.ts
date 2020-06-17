@@ -18,6 +18,7 @@ export enum Algorithm {
   Dijkstra = 1,
   Bfs = 2,
   Dfs = 3,
+  AStar = 4,
 }
 
 /**

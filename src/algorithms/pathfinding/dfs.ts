@@ -14,7 +14,6 @@
 
 import IPathFinder from "./ipathfinder";
 import Node from "../../components/grid/typings/node";
-import { stat } from "fs";
 
 class Dfs implements IPathFinder {
   // holds nodes

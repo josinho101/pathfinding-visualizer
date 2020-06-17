@@ -200,6 +200,12 @@ class NodeHelper {
       isSelected: false,
     };
 
+    let aStar: DropdownOption = {
+      id: enums.Algorithm.AStar,
+      value: NodeHelper.getAlgorithmName(enums.Algorithm.AStar),
+      isSelected: false,
+    };
+
     let bfs: DropdownOption = {
       id: enums.Algorithm.Bfs,
       value: NodeHelper.getAlgorithmName(enums.Algorithm.Bfs),
@@ -213,6 +219,7 @@ class NodeHelper {
     };
 
     options.push(dijkstra);
+    options.push(aStar);
     options.push(bfs);
     options.push(dfs);
 
@@ -233,6 +240,9 @@ class NodeHelper {
     switch (type) {
       case enums.Algorithm.Dijkstra:
         name = "Dijkstra's";
+        break;
+      case enums.Algorithm.AStar:
+        name = "A Star (A*)";
         break;
       case enums.Algorithm.Bfs:
         name = "Breadth first search";
