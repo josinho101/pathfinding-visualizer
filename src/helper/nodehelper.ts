@@ -242,7 +242,7 @@ class NodeHelper {
         name = "Dijkstra's";
         break;
       case enums.Algorithm.AStar:
-        name = "A Star (A*)";
+        name = "A* (A Star)";
         break;
       case enums.Algorithm.Bfs:
         name = "Breadth first search";
@@ -253,6 +253,45 @@ class NodeHelper {
     }
 
     return name;
+  }
+
+  /**
+   * return nodes in path order
+   * @param destination destination node
+   */
+  public static getNodesAsPath(destination: Node) {
+    const nodesInShortestPath: Node[] = [];
+    let currentNode = destination;
+    while (currentNode) {
+      nodesInShortestPath.unshift(currentNode);
+      currentNode = currentNode.previousNode;
+    }
+
+    return nodesInShortestPath;
+  }
+
+  /**
+   * return unvisited neighbors of the given node
+   * @param node node
+   * @param grid grid
+   */
+  public static getUnvisitedNeighbors(node: Node, grid: Node[][]) {
+    const neighbors: Node[] = [];
+    const { row, column } = node;
+
+    if (row > 0) {
+      neighbors.push(grid[row - 1][column]);
+    }
+    if (row < grid.length - 1) {
+      neighbors.push(grid[row + 1][column]);
+    }
+    if (column > 0) {
+      neighbors.push(grid[row][column - 1]);
+    }
+    if (column < grid[0].length - 1) {
+      neighbors.push(grid[row][column + 1]);
+    }
+    return neighbors.filter((neighbor) => !neighbor.isVisited);
   }
 }
 

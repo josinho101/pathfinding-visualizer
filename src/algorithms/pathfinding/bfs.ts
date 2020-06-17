@@ -17,6 +17,7 @@
  */
 
 import IPathFinder from "./ipathfinder";
+import NodeHelper from "../../helper/nodehelper";
 import Node from "../../components/grid/typings/node";
 
 class Bfs implements IPathFinder {
@@ -37,7 +38,7 @@ class Bfs implements IPathFinder {
    */
   find(startNode: Node, destinationNode: Node): Node[][] {
     let queue = [];
-    let visitedNode = [];
+    let visitedNodes = [];
 
     startNode.isVisited = true;
     queue.push(startNode);
@@ -54,43 +55,22 @@ class Bfs implements IPathFinder {
           break;
         }
 
-        let unvisitedNodes = this.getUnvisitedNeighbors(current, this.nodes);
+        let unvisitedNodes = NodeHelper.getUnvisitedNeighbors(
+          current,
+          this.nodes
+        );
         for (let nieghbour of unvisitedNodes) {
           nieghbour.isVisited = true;
           nieghbour.previousNode = current;
           queue.push(nieghbour);
-          visitedNode.push(nieghbour);
+          visitedNodes.push(nieghbour);
         }
       }
     }
 
-    const nodesInShortestPath: Node[] = [];
-    let currentNode = destinationNode;
-    while (currentNode) {
-      nodesInShortestPath.unshift(currentNode);
-      currentNode = currentNode.previousNode;
-    }
+    const path: Node[] = NodeHelper.getNodesAsPath(destinationNode);
 
-    return [visitedNode, nodesInShortestPath];
-  }
-
-  private getUnvisitedNeighbors(node: Node, grid: Node[][]) {
-    const neighbors: Node[] = [];
-    const { row, column } = node;
-
-    if (row > 0) {
-      neighbors.push(grid[row - 1][column]);
-    }
-    if (row < grid.length - 1) {
-      neighbors.push(grid[row + 1][column]);
-    }
-    if (column > 0) {
-      neighbors.push(grid[row][column - 1]);
-    }
-    if (column < grid[0].length - 1) {
-      neighbors.push(grid[row][column + 1]);
-    }
-    return neighbors.filter((neighbor) => !neighbor.isVisited);
+    return [visitedNodes, path];
   }
 }
 

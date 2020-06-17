@@ -3,6 +3,7 @@
  */
 
 import IPathFinder from "./ipathfinder";
+import NodeHelper from "../../helper/nodehelper";
 import Node from "../../components/grid/typings/node";
 
 class Dijkstra implements IPathFinder {
@@ -59,42 +60,18 @@ class Dijkstra implements IPathFinder {
       }
     }
 
-    const nodesInShortestPath: Node[] = [];
-    let currentNode = destinationNode;
-    while (currentNode) {
-      nodesInShortestPath.unshift(currentNode);
-      currentNode = currentNode.previousNode;
-    }
+    const path: Node[] = NodeHelper.getNodesAsPath(destinationNode);
 
-    return [visitedNodes, nodesInShortestPath];
+    return [visitedNodes, path];
   };
 
   private updateDistanceOfUnvisitedNeighbors(node: Node, grid: Node[][]) {
-    const unvisitedNeighbours = this.getUnvisitedNeighbors(node, grid);
+    const unvisitedNeighbours = NodeHelper.getUnvisitedNeighbors(node, grid);
 
     for (const neighbor of unvisitedNeighbours) {
       neighbor.distance = node.distance + 1;
       neighbor.previousNode = node;
     }
-  }
-
-  private getUnvisitedNeighbors(node: Node, grid: Node[][]) {
-    const neighbors: Node[] = [];
-    const { row, column } = node;
-
-    if (row > 0) {
-      neighbors.push(grid[row - 1][column]);
-    }
-    if (row < grid.length - 1) {
-      neighbors.push(grid[row + 1][column]);
-    }
-    if (column > 0) {
-      neighbors.push(grid[row][column - 1]);
-    }
-    if (column < grid[0].length - 1) {
-      neighbors.push(grid[row][column + 1]);
-    }
-    return neighbors.filter((neighbor) => !neighbor.isVisited);
   }
 
   /**

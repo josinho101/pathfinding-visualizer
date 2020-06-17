@@ -13,6 +13,7 @@
  */
 
 import IPathFinder from "./ipathfinder";
+import NodeHelper from "../../helper/nodehelper";
 import Node from "../../components/grid/typings/node";
 
 class Dfs implements IPathFinder {
@@ -49,7 +50,10 @@ class Dfs implements IPathFinder {
           visitedNodes.push(current);
           current.isVisited = true;
 
-          let neighbours = this.getUnvisitedNeighbors(current, this.nodes);
+          let neighbours = NodeHelper.getUnvisitedNeighbors(
+            current,
+            this.nodes
+          );
           for (const neighbour of neighbours) {
             neighbour.previousNode = current;
             stack.push(neighbour);
@@ -62,33 +66,9 @@ class Dfs implements IPathFinder {
       }
     }
 
-    const nodesInShortestPath: Node[] = [];
-    let currentNode = destinationNode;
-    while (currentNode) {
-      nodesInShortestPath.unshift(currentNode);
-      currentNode = currentNode.previousNode;
-    }
+    const path: Node[] = NodeHelper.getNodesAsPath(destinationNode);
 
-    return [visitedNodes, nodesInShortestPath];
-  }
-
-  private getUnvisitedNeighbors(node: Node, grid: Node[][]) {
-    const neighbors: Node[] = [];
-    const { row, column } = node;
-
-    if (row > 0) {
-      neighbors.push(grid[row - 1][column]);
-    }
-    if (row < grid.length - 1) {
-      neighbors.push(grid[row + 1][column]);
-    }
-    if (column > 0) {
-      neighbors.push(grid[row][column - 1]);
-    }
-    if (column < grid[0].length - 1) {
-      neighbors.push(grid[row][column + 1]);
-    }
-    return neighbors.filter((neighbor) => !neighbor.isVisited);
+    return [visitedNodes, path];
   }
 }
 
