@@ -1,5 +1,6 @@
 import Bfs from "./bfs";
 import Dfs from "./dfs";
+import AStar from "./astar";
 import Dijkstra from "./dijkstra";
 import * as enums from "../../enums";
 import IPathFinder from "./ipathfinder";
@@ -43,6 +44,9 @@ class PathFindingEngine {
           break;
         case enums.Algorithm.Dfs:
           pathFinder = new Dfs(this.nodes);
+          break;
+        case enums.Algorithm.AStar:
+          pathFinder = new AStar(this.nodes);
           break;
         default:
           throw new Error("Algorithm implementation not found !!");
