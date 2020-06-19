@@ -13,6 +13,9 @@ npm start
 ### Path finding
 
 1. Dijkstra's algorithm
+2. A\* (A Star)
+3. Breadth-first search
+4. Depth-first search
 
 ### Maze generation
 
