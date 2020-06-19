@@ -34,11 +34,10 @@ class AStar implements IPathFinder {
    * @param destinationNode destination node
    */
   public find(startNode: Node, destinationNode: Node): Node[][] {
+    let visitedAStarNodes: AStarNode[] = [];
     let openSet: AStarNode[] = [];
-    let cameFrom: AStarNode[] = [];
 
     let grid = this.mapNodeToAStarNode(this.nodes);
-    let nodes = this.flatten2DArray(grid);
     const [start, goal] = this.getStartAndDestination(grid);
 
     // set g and f values of start node
@@ -49,20 +48,117 @@ class AStar implements IPathFinder {
     openSet.push(start);
 
     while (openSet.length > 0) {
-      // sort openset based on fScore and set
-      // current element as node having lowest fScore
+      // sort openset based on fScore and
+      // set current element as node having lowest fScore
       this.sortNodeByFScore(openSet);
       let current = openSet.shift();
 
       if (current) {
+        current.isVisited = true;
         // if current and goal nodes are same, we reached destination
         if (current === goal) {
           break;
         }
+
+        if (current.isBrick) {
+          continue;
+        }
+
+        let neighbors = this.getNeighbors(current, grid);
+
+        for (const neighbor of neighbors) {
+          // find tentative gScore. node distance is taken as 1
+          let tentative_gScore = current.gScore + 1;
+          if (tentative_gScore < neighbor.gScore) {
+            // find heuristic distance between neighbour and destination node
+            let heuristicValue = this.getHeuristicValue(neighbor, goal);
+            neighbor.previousNode = current;
+            neighbor.gScore = tentative_gScore;
+            neighbor.fScore = neighbor.gScore + heuristicValue;
+
+            // check if neighbour is already added to open set collection
+            let index = openSet.indexOf(neighbor);
+            if (index === -1) {
+              openSet.push(neighbor);
+              visitedAStarNodes.push(neighbor);
+            }
+          }
+        }
       }
     }
 
-    return [];
+    // arrange nodes in path order
+    let aStarPath = this.getNodesAsPath(goal);
+    // get visited nodes
+    let visitedNodes = this.mapAstarNodeToNode(
+      visitedAStarNodes.filter((i) => i.isVisited)
+    );
+    let path = this.mapAstarNodeToNode(aStarPath);
+
+    return [visitedNodes, path];
+  }
+
+  /**
+   * return nodes in path order
+   * @param destination destination node
+   */
+  private getNodesAsPath(destination: AStarNode) {
+    const nodesInShortestPath: AStarNode[] = [];
+    let currentNode = destination;
+    while (currentNode) {
+      nodesInShortestPath.unshift(currentNode);
+      currentNode = currentNode.previousNode;
+    }
+
+    return nodesInShortestPath;
+  }
+
+  /**
+   * map AStarNode to Node
+   * @param visitedNodes visited nodes
+   */
+  private mapAstarNodeToNode = (visitedNodes: AStarNode[]) => {
+    let nodes: Node[] = [];
+    for (let astarNode of visitedNodes) {
+      let node: Node = {
+        row: astarNode.row,
+        column: astarNode.column,
+        distance: Infinity,
+        isBrick: false,
+        isDestination: astarNode.isDestination,
+        isStart: astarNode.isStart,
+        isVisited: true,
+        previousNode: astarNode.previousNode,
+      };
+
+      nodes.push(node);
+    }
+
+    return nodes;
+  };
+
+  /**
+   * return neighbors of the given node
+   * @param node node
+   * @param grid grid
+   */
+  private getNeighbors(node: AStarNode, grid: AStarNode[][]) {
+    const neighbors: AStarNode[] = [];
+    const { row, column } = node;
+
+    if (row > 0) {
+      neighbors.push(grid[row - 1][column]);
+    }
+    if (row < grid.length - 1) {
+      neighbors.push(grid[row + 1][column]);
+    }
+    if (column > 0) {
+      neighbors.push(grid[row][column - 1]);
+    }
+    if (column < grid[0].length - 1) {
+      neighbors.push(grid[row][column + 1]);
+    }
+    return neighbors;
   }
 
   /**
@@ -87,6 +183,10 @@ class AStar implements IPathFinder {
     return heuristicValue;
   }
 
+  /**
+   * find start and destination node from grid
+   * @param grid grid
+   */
   private getStartAndDestination(grid: AStarNode[][]) {
     let start = this.getEmptyAStartNode();
     let goal = this.getEmptyAStartNode();
@@ -105,6 +205,9 @@ class AStar implements IPathFinder {
     return [start, goal];
   }
 
+  /**
+   * init empty node
+   */
   private getEmptyAStartNode() {
     let node: AStarNode = {
       row: 0,
@@ -119,22 +222,6 @@ class AStar implements IPathFinder {
     };
 
     return node;
-  }
-
-  /**
-   * flatten node to Astar node
-   * @param grid grid
-   */
-  private flatten2DArray(grid: AStarNode[][]) {
-    let nodes: AStarNode[] = [];
-
-    for (const row of grid) {
-      for (const node of row) {
-        nodes.push(node);
-      }
-    }
-
-    return nodes;
   }
 
   /**

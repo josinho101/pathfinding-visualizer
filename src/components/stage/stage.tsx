@@ -268,10 +268,12 @@ class Stage extends React.Component<Props, State> {
 
       let newPosition = NodeHelper.getNodePositionFromElemet(element);
       if (newPosition) {
+        // nodePositions 0th index holds start node position
+        // and index 1 holds destination node position
         if (this.draggedNodeType === enums.NodeType.Start) {
-          this.nodePositions[0] = newPosition;
+          this.updateStartOrDestinationNode(0, newPosition);
         } else if (this.draggedNodeType === enums.NodeType.Destination) {
-          this.nodePositions[1] = newPosition;
+          this.updateStartOrDestinationNode(1, newPosition);
         }
       }
     }
@@ -279,6 +281,21 @@ class Stage extends React.Component<Props, State> {
     this.draggedNodeType = enums.NodeType.None;
     this.isPanStarted = false;
   };
+
+  /**
+   * update start of destination node based on index
+   * @param index index of nodePositions
+   * @param newPosition new node position
+   */
+  private updateStartOrDestinationNode(index: number, newPosition: number[]) {
+    let position = this.nodePositions[index];
+    let row = position[0];
+    let column = position[1];
+
+    this.nodes[row][column].isStart = false;
+    this.nodes[row][column].isDestination = false;
+    this.nodePositions[index] = newPosition;
+  }
 
   /**
    * reset stage
